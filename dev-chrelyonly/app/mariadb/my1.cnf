@@ -1,5 +1,5 @@
 [mysqld]
-
+max_allowed_packet = 10240M
 # InnoDB 内存调优（默认占比最大的内存）
 innodb_buffer_pool_size = 512M
 innodb_log_buffer_size = 8M
