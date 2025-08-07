@@ -1,0 +1,37 @@
+[mysqld]
+
+# InnoDB 内存调优（默认占比最大的内存）
+innodb_buffer_pool_size = 128M
+innodb_log_buffer_size = 8M
+
+# 提升连接能力与并发处理
+max_connections = 100
+max_user_connections = 20
+table_open_cache = 256
+thread_cache_size = 16
+
+# 查询缓存（MariaDB 默认启用，适度配置）
+query_cache_size = 16M
+query_cache_limit = 2M
+query_cache_type = 1
+
+# 连接缓冲相关
+sort_buffer_size = 512K
+read_buffer_size = 512K
+read_rnd_buffer_size = 1M
+join_buffer_size = 512K
+tmp_table_size = 16M
+max_heap_table_size = 16M
+
+# 性能分析关闭（可选开启）
+performance_schema = OFF
+
+# 减少启动开销
+skip_name_resolve
+
+# 字符集（现代兼容性）
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# 允许远程访问（可选）
+bind-address = 0.0.0.0
