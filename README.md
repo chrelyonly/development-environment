@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="https://count.getloli.com" target="_blank">
+  <a href="https://nginx-3.frp.chrelyonly.cn" target="_blank">
     <img alt="Moe Counter!" src="https://nginx-3.frp.chrelyonly.cn/moe-counter-api/@chrelyonly?name=chrelyonly&theme=rule34">
   </a>
 </p>
