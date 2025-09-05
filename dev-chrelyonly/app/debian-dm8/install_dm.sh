@@ -21,7 +21,8 @@ su - dmdba -c "cd $INSTALL_DIR && ./DMInstall.bin -i"
 
 
 
-/home/dmdba/dmdbms/script/root/root_installer.sh
+#/home/dmdba/dmdbms/script/root/root_installer.sh
 
-
-./dminit path=/dmdata/data  SYSDBA_PWD=Admin12345678 SYSAUDITOR_PWD=Admin12345678
+#cd /home/dmdba/dmdbms/bin
+#./dminit path=/dmdata/data  SYSDBA_PWD=Admin12345678 SYSAUDITOR_PWD=Admin12345678
+#/home/dmdba/dmdbms/bin/dmserver /dmdata/data/DAMENG/dm.ini

@@ -6,7 +6,7 @@ services:
     tty: true        # 允许交互式终端
     stdin_open: true # 保持标准输入开启
     ports:
-      - "22:22"
+      - "5236:5236"
     networks:
       - my-network
     volumes:
