@@ -10,7 +10,7 @@ services:
     networks:
       - my-network
     volumes:
-      - ${VOLUME_PATH}/app/debian-dm8/data1:/data
+      - ${VOLUME_PATH}/app/debian-dm8/data:/dmdata/data
       - ${VOLUME_PATH}/app/debian-dm8/init.sh:/init.sh
       - ${VOLUME_PATH}/app/debian-dm8/install_dm.sh:/install_dm.sh
     command: bash -c "bash /init.sh && bash"
