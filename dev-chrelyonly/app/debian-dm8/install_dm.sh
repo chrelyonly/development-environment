@@ -17,3 +17,11 @@ chown -R dmdba:dinstall "$INSTALL_DIR"
 
 # 3. 切换用户并执行安装
 su - dmdba -c "cd $INSTALL_DIR && ./DMInstall.bin -i"
+
+
+
+
+/home/dmdba/dmdbms/script/root/root_installer.sh
+
+
+./dminit path=/dmdata/data  SYSDBA_PWD=Admin12345678 SYSAUDITOR_PWD=Admin12345678
