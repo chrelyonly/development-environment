@@ -1,6 +1,8 @@
 services:
 #  测试达梦数据库
   debian-dm8-public1:
+    cpus: 0.5
+    mem_limit: 512m
     image: debian:12
     container_name: debian-dm8-public1
     tty: true        # 允许交互式终端
