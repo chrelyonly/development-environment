@@ -1,0 +1,21 @@
+[mysqld]
+
+# InnoDB 设置（适合大数据）
+default_storage_engine=InnoDB
+innodb_buffer_pool_size=2G        # 50% 内存缓存
+innodb_log_file_size=512M         # 日志文件大小，保证大事务
+innodb_log_buffer_size=64M        # 日志缓冲
+innodb_file_per_table=1
+innodb_flush_log_at_trx_commit=1
+innodb_flush_method=O_DIRECT
+innodb_read_io_threads=4
+innodb_write_io_threads=4
+
+# 连接与性能
+max_connections=500
+max_allowed_packet=256M           # 支持大 JSON/大对象插入
+tmp_table_size=256M
+max_heap_table_size=256M
+table_open_cache=2048
+thread_cache_size=128
+back_log=512
