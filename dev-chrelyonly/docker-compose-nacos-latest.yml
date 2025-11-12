@@ -8,6 +8,14 @@ services:
       - NACOS_AUTH_TOKEN=QXl5S0NiYW1wRjlpSjl0dEZmZXJLdzBMZDNhMHBxcFA=
       - NACOS_AUTH_IDENTITY_KEY=chrelyonly
       - NACOS_AUTH_IDENTITY_VALUE=chrelyonly
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=192.168.227.130
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_USER=nacos
+      - MYSQL_SERVICE_PASSWORD=c7fYmBPyhFhBb34R
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      - MYSQL_DATABASE_NUM=1
     ports:
       - "8080:8080"
       - "9848:9848"
