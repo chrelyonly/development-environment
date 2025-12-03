@@ -1,0 +1,42 @@
+
+services:
+  sql-server-public1-2022:
+    mem_limit: 1g  # 限制容器最大使用内存为 2GB，避免占用宿主机过多资源
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-server-public1-2022
+    networks:
+      - my-network
+    ports:
+      - "51433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: sql-server-public1-2022
+    volumes:
+      - /www/dk_project/dk_app/chrelyonly-sql-server/app/data1:/var/opt/mssql
+
+  sql-server-public2-2022:
+    mem_limit: 1g
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-server-public2-2022
+    networks:
+      - my-network
+    ports:
+      - "51434:1433"
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: sql-server-public2-2022
+    volumes:
+      - /www/dk_project/dk_app/chrelyonly-sql-server/app/data2:/var/opt/mssql
+
+networks:
+  my-network:  # 定义自定义网络
+    name: my-network  # 自定义网络名称，可选
+    driver: bridge    # 使用桥接网络，默认 Docker 网络模式
+    ipam:             # IP 地址管理（IP Address Management）
+      driver: default # 默认 IPAM 驱动
+      config:         # 子网配置，可配置多个
+        - subnet: 172.20.0.0/16  # 自定义子网段
+          gateway: 172.20.0.1    # 子网默认网关
+          aux_addresses:         # 预留 IP 地址
+            host1: 172.20.0.2
+            host2: 172.20.0.3
