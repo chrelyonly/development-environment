@@ -1,7 +1,7 @@
 
 services:
   mysql-public1-9.5:
-    mem_limit: 2g  # 限制容器最大使用内存为 2GB，避免占用宿主机过多资源
+    mem_limit: 1g  # 限制容器最大使用内存为 2GB，避免占用宿主机过多资源
     image: docker.1ms.run/library/mysql:9.5  # MySQL 官方镜像（8.5 版本）
     container_name: mysql-public1-9.5  # 容器名称，可通过 docker ps 查看或操作
     networks:
@@ -11,9 +11,25 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mysql-public1-9.5  # 设置 MySQL root 用户密码
     volumes:
-      - /www/dk_project/dk_app/chrelyonly-mysql/app/data:/var/lib/mysql
+      - /www/dk_project/dk_app/chrelyonly-mysql/app/data1:/var/lib/mysql
       # 数据持久化，将宿主机目录挂载到容器 MySQL 数据目录
 #      - /www/dk_project/dk_app/chrelyonly-mysql/app/my.cnf:/etc/mysql/my.cnf
+      # 自定义 MySQL 配置文件挂载到容器内，覆盖默认配置
+
+  mysql-public2-9.5:
+    mem_limit: 1g  # 限制容器最大使用内存为 2GB，避免占用宿主机过多资源
+    image: docker.1ms.run/library/mysql:9.5  # MySQL 官方镜像（8.5 版本）
+    container_name: mysql-public2-9.5  # 容器名称，可通过 docker ps 查看或操作
+    networks:
+      - my-network  # 将容器加入自定义网络 my-network
+    ports:
+      - "53307:3306"  # 将容器的 3306 端口映射到宿主机的 3306 端口，方便外部访问
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql-public2-9.5  # 设置 MySQL root 用户密码
+    volumes:
+      - /www/dk_project/dk_app/chrelyonly-mysql/app/data2:/var/lib/mysql
+      # 数据持久化，将宿主机目录挂载到容器 MySQL 数据目录
+      #      - /www/dk_project/dk_app/chrelyonly-mysql/app/my.cnf:/etc/mysql/my.cnf
       # 自定义 MySQL 配置文件挂载到容器内，覆盖默认配置
 
 networks:

@@ -1,40 +1,30 @@
 services:
-  mariadb-public1:
-    image: docker.1ms.run/library/mariadb
+  mariadb-public1-latest:
+    mem_limit: 1g
+    image: docker.1ms.run/library/mariadb:latest
     container_name: mariadb-public1
     networks:
       - my-network
     ports:
-      - "3306:3306"
+      - "53308:3306"
     environment:
       MARIADB_ROOT_PASSWORD: root
     volumes:
-      - ${VOLUME_PATH}/app/mariadb/data1:/var/lib/mysql
-      - ${VOLUME_PATH}/app/mariadb/my1.cnf:/etc/mysql/my.cnf
+      - /www/dk_project/dk_app/chrelyonly-mariadb/app/data1:/var/lib/mysql
 
-#  mariadb-public2:
-#    image: docker.1ms.run/library/mariadb
-#    container_name: mariadb-public2
-#    networks:
-#      - my-network
-#    environment:
-#      MARIADB_ROOT_PASSWORD: mariadb-public2
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /www/dk_project/dk_app/mariadb-public/app/data2:/var/lib/mysql
-#      - /www/dk_project/dk_app/mariadb-public/app/my2.cnf:/etc/mysql/my.cnf
-#
-#  mariadb-public3:
-#    image: docker.1ms.run/library/mariadb
-#    container_name: mariadb-public3
-#    networks:
-#      - my-network
-#    environment:
-#      MARIADB_ROOT_PASSWORD: mariadb-public3
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /www/dk_project/dk_app/mariadb-public/app/data3:/var/lib/mysql
-#      - /www/dk_project/dk_app/mariadb-public/app/my3.cnf:/etc/mysql/my.cnf
+
+  mariadb-public2-latest:
+    mem_limit: 1g
+    image: docker.1ms.run/library/mariadb:latest
+    container_name: mariadb-public2
+    networks:
+      - my-network
+    ports:
+      - "53309:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - /www/dk_project/dk_app/chrelyonly-mariadb/app/data2:/var/lib/mysql
 
 networks:
   my-network:  # 定义自定义网络
