@@ -1,8 +1,7 @@
 services:
-#  测试达梦数据库
+  #  测试达梦数据库
   debian-dm8-public1:
-    cpus: 0.5
-    mem_limit: 512m
+    mem_limit: 2g
     image: debian:12
     container_name: debian-dm8-public1
     tty: true        # 允许交互式终端
@@ -12,11 +11,14 @@ services:
     networks:
       - my-network
     volumes:
-      - ${VOLUME_PATH}/app/debian-dm8/data:/dmdata/data
+      - ${VOLUME_PATH}/app/debian-dm8/data/dmdata:/dmdata
+      - ${VOLUME_PATH}/app/debian-dm8/data/home:/home
       - ${VOLUME_PATH}/app/debian-dm8/data1/dm8_20250506_x86_rh7_64:/data/dm8_20250506_x86_rh7_64
       - ${VOLUME_PATH}/app/debian-dm8/init.sh:/init.sh
       - ${VOLUME_PATH}/app/debian-dm8/install_dm.sh:/install_dm.sh
     command: bash -c "bash /init.sh && bash"
+    # command: ["/home/dmdba/dmdbms/bin/dmserver", "/dmdata/data/DAMENG/dm.ini"]
+
 
 networks:
   my-network:  # 定义自定义网络
