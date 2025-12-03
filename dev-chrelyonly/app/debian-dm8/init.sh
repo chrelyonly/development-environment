@@ -4,10 +4,10 @@
 #通过修改这个来实现启动脚本
 
 #
-#sh -c tail -f /dev/null
+sh -c tail -f /dev/null
 
 
-/home/dmdba/dmdbms/bin/dmserver /dmdata/data/DAMENG/dm.ini
+#/home/dmdba/dmdbms/bin/dmserver /dmdata/data/DAMENG/dm.ini
 
 
 

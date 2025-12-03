@@ -1,0 +1,10 @@
+FROM debian:12
+LABEL authors="11725"
+
+
+COPY app/debian-dm8/data/dmdata /dmdata
+COPY app/debian-dm8/data/home /home
+
+
+
+CMD ["/home/dmdba/dmdbms/bin/dmserver", "/dmdata/data/DAMENG/dm.ini"]
