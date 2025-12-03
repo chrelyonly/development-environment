@@ -1,34 +1,28 @@
 services:
   redis-public1:
+    mem_limit: 512m
     image: docker.1ms.run/library/redis
     container_name: redis-public1
     networks:
       - my-network
     ports:
-      - "6379:6379"
+      - "56379:6379"
     volumes:
-      - ${VOLUME_PATH}/app/redis:/app/
+      - /www/dk_project/dk_app/chrelyonly-redis/app:/app
     command: ["redis-server", "/app/redis1.conf"]
 
-#  redis-public2:
-#    image: docker.1ms.run/library/redis
-#    container_name: redis-public2
-#    networks:
-#      - my-network
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /www/dk_project/dk_app/redis-public/app:/app
-#    command: ["redis-server", "/app/redis2.conf"]
-#
-#  redis-public3:
-#    image: docker.1ms.run/library/redis
-#    container_name: redis-public3
-#    networks:
-#      - my-network
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /www/dk_project/dk_app/redis-public/app:/app
-#    command: ["redis-server", "/app/redis3.conf"]
+  redis-public2:
+    mem_limit: 512m
+    image: docker.1ms.run/library/redis
+    container_name: redis-public2
+    networks:
+      - my-network
+    ports:
+      - "56380:6379"
+    volumes:
+      - /www/dk_project/dk_app/chrelyonly-redis/app:/app
+    command: ["redis-server", "/app/redis2.conf"]
+
 
 networks:
   my-network:  # 定义自定义网络
