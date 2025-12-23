@@ -14,10 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 移除专有依赖（例如闭源 SDK / 不可分发代码）
-      - name: Remove proprietary dependencies
-        run: sh scripts/remove_proprietary_dependencies.sh
-
       # 安装 JDK 17（Android 构建所需）
       - name: Set up JDK 17
         uses: actions/setup-java@v4
