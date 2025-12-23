@@ -1,0 +1,11 @@
+name: workflow.yml
+on:
+  workflow_dispatch:
+
+jobs:
+  # =========================
+  # Job 1：基础信息准备
+  # =========================
+  build:
+    # 使用 Ubuntu 24.04 Runner
+    runs-on: ubuntu-24.04

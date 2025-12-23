@@ -1,0 +1,123 @@
+# 工作流名称：用于编译 Android APK
+name: Compile APK
+
+# 触发方式：仅支持手动触发（GitHub 页面点 Run workflow）
+on:
+  workflow_dispatch:
+
+# 全局环境变量（所有 job 都可用）
+env:
+  FLUTTER_VERSION: "3.35.6"   # Flutter SDK 版本
+  RUST_VERSION: "1.84.1"     # Rust 工具链版本
+  APK_BUILD_DIR: "/tmp/build" # APK 构建的临时目录（避免污染仓库根目录）
+
+jobs:
+  # =========================
+  # Job 1：基础信息准备
+  # =========================
+  build:
+    # 使用 Ubuntu 24.04 Runner
+    runs-on: ubuntu-24.04
+
+    # 定义 job 输出，供后续 job 使用
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+      # 拉取仓库代码
+      - uses: actions/checkout@v4
+
+      # 从 pubspec.yaml 中提取版本号
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          # 使用 sed 提取 version: x.y.z 中的版本号
+          VERSION=$(sed -n 's/^version: \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' app/pubspec.yaml)
+          # 将 version 写入 GITHUB_OUTPUT，作为 job 输出变量
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  # =========================
+  # Job 2：构建 APK
+  # =========================
+  build_apk:
+    # 依赖 build job，确保先获取版本信息
+    needs: build
+
+    # 使用 Ubuntu 22.04 Runner（兼容性更稳）
+    runs-on: ubuntu-22.04
+
+    steps:
+      # 拉取仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 移除专有依赖（例如闭源 SDK / 不可分发代码）
+      - name: Remove proprietary dependencies
+        run: sh scripts/remove_proprietary_dependencies.sh
+
+      # 将整个仓库复制到临时构建目录
+      # 这样可以避免在 GitHub workspace 中直接操作
+      - name: Copy files to env.APK_BUILD_DIR
+        run: |
+          mkdir -p $APK_BUILD_DIR
+          cp -r . $APK_BUILD_DIR
+
+      # 解码 Android key.properties（签名配置）
+      # secrets 中存储的是 base64 编码后的内容
+      - name: Decode key.properties file
+        working-directory: ${{ env.APK_BUILD_DIR }}
+        env:
+          ENCODED_STRING: ${{ secrets.ANDROID_KEY_PROPERTIES }}
+        run: |
+          echo $ENCODED_STRING | base64 -di > app/android/key.properties
+
+      # 解码 Android keystore 文件（.jks）
+      - name: Decode android-keystore.jks file
+        working-directory: ${{ env.APK_BUILD_DIR }}
+        env:
+          ENCODED_STRING: ${{ secrets.ANDROID_KEY_STORE }}
+        run: |
+          mkdir secrets
+          echo $ENCODED_STRING | base64 -di > secrets/android-keystore.jks
+
+      # 安装 JDK 17（Android 构建所需）
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 安装指定版本的 Flutter SDK
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      # 安装 Rust 工具链（供 Flutter FFI / 原生模块使用）
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          # 覆盖 runner 默认 rust 版本
+          override: ${{ env.RUST_VERSION }}
+
+      # 获取 Flutter 项目依赖
+      - name: Dependencies
+        working-directory: ${{ env.APK_BUILD_DIR }}/app
+        run: flutter pub get
+
+      # 构建 APK
+      # --split-per-abi：按 ABI 拆分多个 APK（减小体积）
+      - name: Build APK
+        working-directory: ${{ env.APK_BUILD_DIR }}/app
+        run: flutter build apk --split-per-abi
+
+      # 上传构建产物（APK）到 GitHub Actions Artifacts
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-result
+          path: |
+            ${{ env.APK_BUILD_DIR }}/app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            ${{ env.APK_BUILD_DIR }}/app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            ${{ env.APK_BUILD_DIR }}/app/build/app/outputs/flutter-apk/app-x86_64-release.apk
